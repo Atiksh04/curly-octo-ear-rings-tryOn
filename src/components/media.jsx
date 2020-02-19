@@ -53,17 +53,17 @@ export default class MediaComponent extends React.Component{
 	componentDidMount(){ 
 
 		window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame       || 
-          window.webkitRequestAnimationFrame || 
-          window.mozRequestAnimationFrame    || 
-          window.oRequestAnimationFrame      || 
-          window.msRequestAnimationFrame     || 
-          function(/* function */ callback, /* DOMElement */ element){
-              window.setTimeout(callback, 1000 / 60);
-          };
-})();
+		  return  window.requestAnimationFrame       || 
+		          window.webkitRequestAnimationFrame || 
+		          window.mozRequestAnimationFrame    || 
+		          window.oRequestAnimationFrame      || 
+		          window.msRequestAnimationFrame     || 
+		          function(/* function */ callback, /* DOMElement */ element){
+		              window.setTimeout(callback, 1000 / 60);
+		          };
+			})();
 
-
+			console.log(window.requestAnimFrame)
 		// if(!window.requestAnimationFrame){
 		// 	console.log('inside !requestAnimationFrame')
 		// 	window.requestAnimationFrame=window.webkitRequestAnimationFrame
@@ -84,9 +84,9 @@ export default class MediaComponent extends React.Component{
 			const draw = () =>{
 			this.canvasRef.current.getContext("2d").drawImage(this.webCamRef.current,0,0,this.canvasRef.current.height,this.canvasRef.current.height)
 			
-			window.requestAnimationFrame(draw)
+			window.requestAnimFrame(draw)
 			}
-			window.requestAnimationFrame(draw)
+			window.requestAnimFrame(draw)
 			//console.log('media object',this.webCamRef)
 			this.tryOn()
 		})
@@ -156,11 +156,11 @@ export default class MediaComponent extends React.Component{
 // 		//this.canvasRef.current.getContext('2d').clearReact(pose.keypoints[3].position.x,pose.keypoints[3].position.y,50,80)	
 // //		this.canvasRef.current.getContext('2d').arc(pose.keypoints[0].position.x, pose.keypoints[0].position.y, 10,0, 2* Math.PI);
 // 		this.canvasRef.current.getContext('2d').drawImage(this.imgRef.current,pose.keypoints[0].position.x,pose.keypoints[0].position.y,50,80)
-// 		//requestAnimationFrame(drawObject)
+// 		//requestAnimFrame(drawObject)
 // 		}		
 
 
-		this.r=window.requestAnimationFrame(this.repeatTryon)	
+		this.r=window.requestAnimFrame(this.repeatTryon)	
 		
 		
 	
@@ -169,19 +169,19 @@ export default class MediaComponent extends React.Component{
 	drawObject(){
 		this.canvasRef.current.getContext('2d').drawImage(this.imgRef.current,this.lx,this.ly,50,80)
 		this.canvasRef.current.getContext('2d').drawImage(this.imgRef.current,this.rx,this.ry,50,80)
-		this.e = window.requestAnimationFrame(this.drawObject)
+		this.e = window.requestAnimFrame(this.drawObject)
 	}
 	imageCLick(){
 		this.toggleSection()
 		this.repeatTryon()
-		window.requestAnimationFrame(this.drawObject)
+		window.requestAnimFrame(this.drawObject)
 		
 	}
 	nathiyaClick(){
 		this.toggleSection()
 		
 		this.repeatTryon()
-		window.requestAnimationFrame(this.drawNathiya)		
+		window.requestAnimFrame(this.drawNathiya)		
 	}
 	toggleSection(){
 		this.setState({
@@ -190,7 +190,7 @@ export default class MediaComponent extends React.Component{
 	}
 	drawNathiya(){
 		this.canvasRef.current.getContext('2d').drawImage(this.nathiya.current,this.nosex,this.nosey,45,60)
-		this.n=window.requestAnimationFrame(this.drawNathiya)
+		this.n=window.requestAnimFrame(this.drawNathiya)
 	}
 	clearFrames(){
 		window.cancelAnimationFrame(this.e)
