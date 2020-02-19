@@ -54,8 +54,10 @@ export default class MediaComponent extends React.Component{
 		}	
 		if(!window.cancelAnimationFrame){
 			window.cancelAnimationFrame=window.webkitCancelRequestAnimationFrame
+			console.log('set to webkit',window.cancelAnimationFrame)
 		}
-
+		console.log('after setting request',window.requestAnimationFrame)
+		console.log('after setting cancel',window.cancelAnimationFrame)
 	}
 
 	componentDidMount(){ 
@@ -66,7 +68,7 @@ export default class MediaComponent extends React.Component{
 		.then((stream)=>{
 			this.webCamRef.current.srcObject=stream 
 			const draw = () =>{
-			this.canvasRef.current.getContext("2d").drwImage(this.webCamRef.current,0,0,this.canvasRef.current.height,this.canvasRef.current.height)
+			this.canvasRef.current.getContext("2d").drawImage(this.webCamRef.current,0,0,this.canvasRef.current.height,this.canvasRef.current.height)
 			
 			window.requestAnimationFrame(draw)
 			}
@@ -171,7 +173,6 @@ export default class MediaComponent extends React.Component{
 		})
 	}
 	drawNathiya(){
-		console.log('inside nathiya')
 		this.canvasRef.current.getContext('2d').drawImage(this.nathiya.current,this.nosex,this.nosey,45,60)
 		this.n=window.requestAnimationFrame(this.drawNathiya)
 	}
