@@ -52,16 +52,7 @@ export default class MediaComponent extends React.Component{
 
 	componentDidMount(){ 
 
-		window.requestAnimFrame = (function(){
-		  return  window.requestAnimationFrame       || 
-		          window.webkitRequestAnimationFrame || 
-		          window.mozRequestAnimationFrame    || 
-		          window.oRequestAnimationFrame      || 
-		          window.msRequestAnimationFrame     || 
-		          function(/* function */ callback, /* DOMElement */ element){
-		              window.setTimeout(callback, 1000 / 60);
-		          };
-			})();
+		window.requestAnimFrame = window.webkitRequestAnimationFrame
 
 			console.log(window.requestAnimFrame)
 		// if(!window.requestAnimationFrame){
@@ -73,7 +64,9 @@ export default class MediaComponent extends React.Component{
 		// 	window.cancelAnimationFrame=window.webkitCancelRequestAnimationFrame
 		// 	console.log('set to webkit',window.cancelAnimationFrame)
 		// }
-		console.log('after setting request',window.requestAnimationFrame)
+		console.log('after setting request',window.requestAnimFrame)
+		window.cancelAnimationFrame=window.webkitCancelAnimationFrame
+		console.log('cancelRequest',window.webkitCancelAnimationFrame)
 		console.log('after setting cancel',window.cancelAnimationFrame)
 		navigator.mediaDevices
 		.getUserMedia({video: {
