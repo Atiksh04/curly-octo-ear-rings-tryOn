@@ -51,15 +51,28 @@ export default class MediaComponent extends React.Component{
 	}
 
 	componentDidMount(){ 
-		if(!window.requestAnimationFrame){
-			console.log('inside !requestAnimationFrame')
-			window.requestAnimationFrame=window.webkitRequestAnimationFrame
-			console.log('set to webkit', window.requestAnimationFrame)
-		}	
-		if(!window.cancelAnimationFrame){
-			window.cancelAnimationFrame=window.webkitCancelRequestAnimationFrame
-			console.log('set to webkit',window.cancelAnimationFrame)
-		}
+
+		window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame       || 
+          window.webkitRequestAnimationFrame || 
+          window.mozRequestAnimationFrame    || 
+          window.oRequestAnimationFrame      || 
+          window.msRequestAnimationFrame     || 
+          function(/* function */ callback, /* DOMElement */ element){
+              window.setTimeout(callback, 1000 / 60);
+          };
+})();
+
+
+		// if(!window.requestAnimationFrame){
+		// 	console.log('inside !requestAnimationFrame')
+		// 	window.requestAnimationFrame=window.webkitRequestAnimationFrame
+		// 	console.log('set to webkit', window.requestAnimationFrame)
+		// }	
+		// if(!window.cancelAnimationFrame){
+		// 	window.cancelAnimationFrame=window.webkitCancelRequestAnimationFrame
+		// 	console.log('set to webkit',window.cancelAnimationFrame)
+		// }
 		console.log('after setting request',window.requestAnimationFrame)
 		console.log('after setting cancel',window.cancelAnimationFrame)
 		navigator.mediaDevices
