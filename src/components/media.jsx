@@ -48,10 +48,13 @@ export default class MediaComponent extends React.Component{
 			this.height=window.innerWidth+ 100
 			this.width=window.innerWidth
 		}
+	}
+
+	componentDidMount(){ 
 		if(!window.requestAnimationFrame){
 			console.log('inside !requestAnimationFrame')
 			window.requestAnimationFrame=window.webkitRequestAnimationFrame
-			console.log('set to webkit', window.webkitRequestAnimationFrame)
+			console.log('set to webkit', window.requestAnimationFrame)
 		}	
 		if(!window.cancelAnimationFrame){
 			window.cancelAnimationFrame=window.webkitCancelRequestAnimationFrame
@@ -59,9 +62,6 @@ export default class MediaComponent extends React.Component{
 		}
 		console.log('after setting request',window.requestAnimationFrame)
 		console.log('after setting cancel',window.cancelAnimationFrame)
-	}
-
-	componentDidMount(){ 
 		navigator.mediaDevices
 		.getUserMedia({video: {
   		  facingMode:"user" , width: 500 , height: 500}
