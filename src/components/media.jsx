@@ -48,7 +48,9 @@ export default class MediaComponent extends React.Component{
 			this.width=window.innerWidth
 		}
 		if(!window.requestAnimationFrame){
+			console.log('inside !requestAnimationFrame')
 			window.requestAnimationFrame=window.webkitRequestAnimationFrame
+			console.log('set to webkit', window.webkitRequestAnimationFrame)
 		}	
 		if(!window.cancelAnimationFrame){
 			window.cancelAnimationFrame=window.webkitCancelRequestAnimationFrame
@@ -64,7 +66,7 @@ export default class MediaComponent extends React.Component{
 		.then((stream)=>{
 			this.webCamRef.current.srcObject=stream 
 			const draw = () =>{
-			this.canvasRef.current.getContext("2d").drawImage(this.webCamRef.current,0,0,this.canvasRef.current.height,this.canvasRef.current.height)
+			this.canvasRef.current.getContext("2d").drwImage(this.webCamRef.current,0,0,this.canvasRef.current.height,this.canvasRef.current.height)
 			
 			window.requestAnimationFrame(draw)
 			}
