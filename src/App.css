@@ -101,7 +101,7 @@
   font-size:25vw;
 }
 .text{
-  font-size:30px;
+  font-size:25px;
   color:#FE0085;
 }
 .bigdot{
@@ -122,10 +122,10 @@
     width:100vw;
   }
   .earring-button{
-    font-size:25px !important;
+    font-size:22px !important;
   }
   .bigdot{
-    font-size:35px;
+    font-size:30px;
   }
 }
 @media only screen and (max-width:370px){
@@ -133,6 +133,6 @@
     font-size:18px !important;
   }
   .bigdot{
-    font-size:35px;
+    font-size:25px;
   }
 }

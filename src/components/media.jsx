@@ -29,7 +29,8 @@ export default class MediaComponent extends React.Component{
 		this.canvasRef=React.createRef()
 		this.state={
 			showSelecter:false,
-			cameraAccess:true
+			cameraAccess:true,
+			loading:true
 		}
 		this.lx=0;
 		this.ly=0;
@@ -93,7 +94,9 @@ export default class MediaComponent extends React.Component{
 		})
 		this.posenet=posenetgot
 		console.log('posenet Loaded')
-	
+		this.setState({
+			loading:false
+		})
 		//this.repeatTryon()
 		
 	}
@@ -193,6 +196,11 @@ export default class MediaComponent extends React.Component{
 				<div className="canvas-wrapper">
 				<canvas ref={this.canvasRef} height={this.height} width={this.width} className="canvas"></canvas>
 				</div>
+				{this.state.loading ? 
+				<div className="selector">
+					<p className="text"> Loading...</p>
+				</div>
+				:
 				<div className="selector">
 					<div className="selector-line">
 					{!this.state.showSelecter ? 
@@ -220,9 +228,8 @@ export default class MediaComponent extends React.Component{
 					</div>
 					}
 					</div>
-					
 				</div>
-
+			}
 				 
 				
 			</div>
@@ -231,7 +238,7 @@ export default class MediaComponent extends React.Component{
 				<span className="camera-icon">
 					<BsCamera/>
 				</span>
-				<p className="text mt-5">We need Camera access for the Try On . Please reload the page to continue .</p>
+				<p className="text mt-5">We need Camera access for the Try On . Please open Site settings and ALLOW Camera Access.</p>
 			</div>
 			}
 			</div>
