@@ -4,7 +4,7 @@ import * as poseEstimation from '@tensorflow-models/posenet'
 import ear1 from '../images/kp.png'
 import nose1 from '../images/nose1.png'
 import {BsChevronUp,BsChevronDown,BsCamera} from 'react-icons/bs'
-
+import adapter from 'webrtc-adapter'
 
 
 //optimize view for ipad 
@@ -16,7 +16,6 @@ export default class MediaComponent extends React.Component{
 	constructor(props){
 		super(props)
 		this.webCamRef=React.createRef()
-		this.video=React.createRef()
 		this.tryOn=this.tryOn.bind(this)
 		this.drawObject = this.drawObject.bind(this)
 		this.toggleSection = this.toggleSection.bind(this)
@@ -69,37 +68,14 @@ export default class MediaComponent extends React.Component{
 		window.cancelAnimationFrame=window.webkitCancelAnimationFrame
 		console.log('cancelRequest',window.webkitCancelAnimationFrame)
 		console.log('after setting cancel',window.cancelAnimationFrame)
-
-
-		if (typeof navigator.mediaDevices === 'undefined') {
-        navigator.mediaDevices = {};
-      }
-      if (typeof navigator.mediaDevices.getUserMedia === 'undefined') {
-        navigator.mediaDevices.getUserMedia = function(constraints) {
-          // First get ahold of the legacy getUserMedia, if present
-          var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-          // Some browsers just don't implement it - return a rejected promise with an error
-          // to keep a consistent interface
-          if (!getUserMedia) {
-            return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
-          }
-          // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
-          return new Promise(function(resolve, reject) {
-            getUserMedia.call(navigator, constraints, resolve, reject);
-          });
-        }
-      }
-		
-
-
-		
 		navigator.mediaDevices
 		.getUserMedia({video: {
   		  facingMode:"user" , width: 500 , height: 500}
 		  })
 		.then((stream)=>{
+			console.log('inside stream')
 			this.webCamRef.current.srcObject=stream 
-			this.video.current.srcObject=stream
+
 			const draw = () =>{
 			this.canvasRef.current.getContext("2d").drawImage(this.webCamRef.current,0,0,this.canvasRef.current.height,this.canvasRef.current.height)
 			window.requestAnimFrame(draw)
@@ -109,10 +85,10 @@ export default class MediaComponent extends React.Component{
 			this.tryOn()
 		})
 		.catch((err)=>{
+			console.log('err in getUserMedia',err)
 			this.setState({
 				cameraAccess:false
 			})
-			setTimeout(this.reprompt,3000)
 		})
 	}
 	async tryOn(){
@@ -219,7 +195,6 @@ export default class MediaComponent extends React.Component{
 	render(){
 		return(
 			<div>
-			<video autoPlay ref={this.video}/>
 			{this.state.cameraAccess ? 
 			<div>
 				<img ref={this.imgRef} src={ear1} height="0px" width="0px"/>
