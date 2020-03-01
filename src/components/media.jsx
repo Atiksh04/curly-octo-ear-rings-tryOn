@@ -154,8 +154,10 @@ export default class MediaComponent extends React.Component{
 // 		//requestAnimFrame(drawObject)
 // 		}		
 
-
-		this.r=window.requestAnimFrame(this.repeatTryon)	
+		setTimeout(()=>{
+			this.repeatTryon()
+		},1)
+		//this.r=window.requestAnimFrame(this.repeatTryon)	
 		
 		
 	
@@ -174,7 +176,8 @@ export default class MediaComponent extends React.Component{
 	}
 	nathiyaClick(){
 		this.toggleSection()
-		//this.repeatTryon()
+		
+	//	this.repeatTryon()
 		window.requestAnimFrame(this.drawNathiya)		
 	}
 	toggleSection(){
