@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import MainComponent from './components/main.jsx'
+import MainComponent from './components/media.jsx'
 class App extends React.Component{
 	render(){
 		return(

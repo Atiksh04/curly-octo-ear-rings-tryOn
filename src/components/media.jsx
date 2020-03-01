@@ -76,7 +76,7 @@ export default class MediaComponent extends React.Component{
 			console.log('inside stream')
 			this.webCamRef.current.srcObject=stream 
 
-			const draw = () =>{
+			const draw=()=>{
 			this.canvasRef.current.getContext("2d").drawImage(this.webCamRef.current,0,0,this.canvasRef.current.height,this.canvasRef.current.height)
 			window.requestAnimFrame(draw)
 			}
@@ -101,10 +101,11 @@ export default class MediaComponent extends React.Component{
 		})
 		this.posenet=posenetgot
 		console.log('posenet Loaded')
+		this.repeatTryon()
 		this.setState({
 			loading:false
 		})
-		//this.repeatTryon()
+		
 		
 	}
 	async repeatTryon(){
@@ -167,14 +168,13 @@ export default class MediaComponent extends React.Component{
 	}
 	imageCLick(){
 		this.toggleSection()
-		this.repeatTryon()
+		//this.repeatTryon()
 		window.requestAnimFrame(this.drawObject)
 		
 	}
 	nathiyaClick(){
 		this.toggleSection()
-		
-		this.repeatTryon()
+		//this.repeatTryon()
 		window.requestAnimFrame(this.drawNathiya)		
 	}
 	toggleSection(){
