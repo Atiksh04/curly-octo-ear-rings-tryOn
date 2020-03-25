@@ -6,12 +6,6 @@ import nose1 from '../images/nose1.png'
 import {BsChevronUp,BsChevronDown,BsCamera} from 'react-icons/bs'
 import adapter from 'webrtc-adapter'
 
-
-//optimize view for ipad 
-
-//optimal inputres for mobilevnet is 230 and slight change in orintatiotn is need when using phone 
-//resolution is optimal for now
-//OPTIMAL configuration for KP image on  desktop as well as mobile NOW just copy the ui to the same extend. 
 export default class MediaComponent extends React.Component{
 	constructor(props){
 		super(props)
@@ -38,9 +32,6 @@ export default class MediaComponent extends React.Component{
 		this.rx=0;
 		this.nosex=0;
 		this.nosey=0;
-		this.r=0
-		this.n=0
-		this.e=0
 		if(window.innerWidth>=640){
 			this.height=640
 			this.width=640	
@@ -51,134 +42,89 @@ export default class MediaComponent extends React.Component{
 	}
 
 	componentDidMount(){ 
-
-		window.requestAnimFrame = window.webkitRequestAnimationFrame
-
-			console.log(window.requestAnimFrame)
-		// if(!window.requestAnimationFrame){
-		// 	console.log('inside !requestAnimationFrame')
-		// 	window.requestAnimationFrame=window.webkitRequestAnimationFrame
-		// 	console.log('set to webkit', window.requestAnimationFrame)
-		// }	
-		// if(!window.cancelAnimationFrame){
-		// 	window.cancelAnimationFrame=window.webkitCancelRequestAnimationFrame
-		// 	console.log('set to webkit',window.cancelAnimationFrame)
-		// }
-		console.log('after setting request',window.requestAnimFrame)
-		window.cancelAnimationFrame=window.webkitCancelAnimationFrame
-		console.log('cancelRequest',window.webkitCancelAnimationFrame)
-		console.log('after setting cancel',window.cancelAnimationFrame)
 		navigator.mediaDevices
 		.getUserMedia({video: {
   		  facingMode:"user" , width: 500 , height: 500}
 		  })
 		.then((stream)=>{
-			console.log('inside stream')
+			//console.log('inside stream')
 			this.webCamRef.current.srcObject=stream 
-
-			const draw=()=>{
-			this.canvasRef.current.getContext("2d").drawImage(this.webCamRef.current,0,0,this.canvasRef.current.height,this.canvasRef.current.height)
-			window.requestAnimFrame(draw)
-			}
-			window.requestAnimFrame(draw)
-			//console.log('media object',this.webCamRef)
-			this.tryOn()
+			 this.tryOn()
 		})
 		.catch((err)=>{
-			console.log('err in getUserMedia',err)
+			//console.log('err in getUserMedia',err)
 			this.setState({
 				cameraAccess:false
 			})
 		})
 	}
 	async tryOn(){
-		console.log('posenet loading..')
+		//console.log('posenet loading..')
 		let posenetgot = await poseEstimation.load({
-			 architecture: 'MobileNetV1',
+	      architecture: 'MobileNetV1',
 		  outputStride: 16,
 		  inputResolution: { width: 230, height: 230 },
-		  multiplier: 0.75
+		  multiplier: 0.50
 		})
 		this.posenet=posenetgot
-		console.log('posenet Loaded')
+		//console.log('posenet Loaded')
 		this.repeatTryon()
-		this.setState({
-			loading:false
-		})
+		
 		
 		
 	}
 	async repeatTryon(){
-		const pose = await this.posenet.estimateSinglePose(this.canvasRef.current, {
+		this.posenet.estimateSinglePose(this.canvasRef.current, {
   		  flipHorizontal: false
+		}).then((pose)=>{
+			this.setState({
+				loading:false
+			})
+			this.canvasRef.current.getContext('2d').drawImage(this.webCamRef.current,0,0,this.canvasRef.current.height,this.canvasRef.current.width)
+			//stabilizing the co-ordinates
+			let prevx=this.lx
+			let prevy=this.ly
+			let prevrx=this.rx
+			let prevry= this.ry
+			let prevnx=this.nosex
+			let prevny=this.nosey
+			this.nosex=pose.keypoints[0].position.x + 20
+			this.nosey=pose.keypoints[0].position.y - 18
+
+			this.nosex=(this.nosex-prevnx)*0.60 + prevnx
+			this.nosey=(this.nosey-prevny)*0.60 + prevny	
+
+			this.rx=pose.keypoints[4].position.x - 17
+			this.ry =pose.keypoints[4].position.y
+			this.lx=pose.keypoints[3].position.x - 13 
+			this.ly=pose.keypoints[3].position.y 
+		
+			this.rx=(this.rx-prevrx)*0.60 + prevrx 
+			this.ry = (this.ry-prevry)*0.60 + prevry
+
+			this.lx=(this.lx-prevx)*0.60 + prevx 
+			this.ly = (this.ly-prevy)*0.60 + prevy
+			setTimeout(()=>{
+				this.repeatTryon()
+			},1)
 		})
-		
-		let prevx=this.lx
-		let prevy=this.ly
-		let prevrx=this.rx
-		let prevry= this.ry
-		let prevnx=this.nosex
-		let prevny=this.nosey
-		this.nosex=pose.keypoints[0].position.x + 20
-		this.nosey=pose.keypoints[0].position.y -18
-
-		this.nosex=(this.nosex-prevnx)*0.60 + prevnx
-		this.nosey=(this.nosey-prevny)*0.60 + prevny	
-
-		this.rx=pose.keypoints[4].position.x - 17
-		this.ry =pose.keypoints[4].position.y
-		this.lx=pose.keypoints[3].position.x - 13 
-		this.ly=pose.keypoints[3].position.y 
-	
-
-		// this.rx=pose.keypoints[4].position.x - 15
-		// this.ry =pose.keypoints[4].position.y + 5
-
-		this.rx=(this.rx-prevrx)*0.60 + prevrx 
-		this.ry = (this.ry-prevry)*0.60 + prevry
-
-		// this.lx=pose.keypoints[3].position.x - 10
-		// this.ly=pose.keypoints[3].position.y + 16	
-
-		this.lx=(this.lx-prevx)*0.60 + prevx 
-		this.ly = (this.ly-prevy)*0.60 + prevy
-
-		//console.log('point',pose.keypoints[4].position.x)
-		//console.log('pose',pose)
-		
-// 		var drawObjectNow= ()=>{
-		
-// 		//this.canvasRef.current.getContext('2d').clearReact(pose.keypoints[3].position.x,pose.keypoints[3].position.y,50,80)	
-// //		this.canvasRef.current.getContext('2d').arc(pose.keypoints[0].position.x, pose.keypoints[0].position.y, 10,0, 2* Math.PI);
-// 		this.canvasRef.current.getContext('2d').drawImage(this.imgRef.current,pose.keypoints[0].position.x,pose.keypoints[0].position.y,50,80)
-// 		//requestAnimFrame(drawObject)
-// 		}		
-
-		setTimeout(()=>{
-			this.repeatTryon()
-		},1)
-		//this.r=window.requestAnimFrame(this.repeatTryon)	
-		
-		
-	
 	}
 
 	drawObject(){
 		this.canvasRef.current.getContext('2d').drawImage(this.imgRef.current,this.lx,this.ly,50,80)
 		this.canvasRef.current.getContext('2d').drawImage(this.imgRef.current,this.rx,this.ry,50,80)
-		this.e = window.requestAnimFrame(this.drawObject)
+		this.e = window.requestAnimationFrame(this.drawObject)
 	}
 	imageCLick(){
 		this.toggleSection()
 		//this.repeatTryon()
-		window.requestAnimFrame(this.drawObject)
+		window.requestAnimationFrame(this.drawObject)
 		
 	}
 	nathiyaClick(){
-		this.toggleSection()
-		
-	//	this.repeatTryon()
-		window.requestAnimFrame(this.drawNathiya)		
+		this.toggleSection()		
+		//this.repeatTryon()
+		window.requestAnimationFrame(this.drawNathiya)		
 	}
 	toggleSection(){
 		this.setState({
@@ -187,7 +133,7 @@ export default class MediaComponent extends React.Component{
 	}
 	drawNathiya(){
 		this.canvasRef.current.getContext('2d').drawImage(this.nathiya.current,this.nosex,this.nosey,45,60)
-		this.n=window.requestAnimFrame(this.drawNathiya)
+		this.n=window.requestAnimationFrame(this.drawNathiya)
 	}
 	clearFrames(){
 		window.cancelAnimationFrame(this.e)
@@ -197,7 +143,7 @@ export default class MediaComponent extends React.Component{
 	}
 	render(){
 		return(
-			<div>
+			<div> 
 			{this.state.cameraAccess ? 
 			<div>
 				<img ref={this.imgRef} src={ear1} height="0px" width="0px"/>
@@ -240,8 +186,6 @@ export default class MediaComponent extends React.Component{
 					</div>
 				</div>
 			}
-				 
-				
 			</div>
 			: 
 			<div>
@@ -255,5 +199,3 @@ export default class MediaComponent extends React.Component{
 			)
 	}
 }
-// <button onClick={this.tryOn}>Start Try On</button>
-		//		<img ref={this.imgRef} src={ear1} height="80px" width="40px"/>
