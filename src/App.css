@@ -114,8 +114,6 @@
   color:white !important;
   border-radius: 4px !important;
 }
-.canvas{
-}
 @media only screen and (max-width:767px){
   .selector{
     width:100vw;

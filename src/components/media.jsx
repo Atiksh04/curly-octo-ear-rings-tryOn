@@ -36,8 +36,8 @@ export default class MediaComponent extends React.Component{
 			this.height=640
 			this.width=640	
 		} else{
-			this.height=window.innerWidth+ 100
-			this.width=window.innerWidth
+			this.height=500
+			this.width=500
 		}
 	}
 
@@ -132,7 +132,7 @@ export default class MediaComponent extends React.Component{
 		})
 	}
 	drawNathiya(){
-		this.canvasRef.current.getContext('2d').drawImage(this.nathiya.current,this.nosex,this.nosey,45,60)
+		this.canvasRef.current.getContext('2d').drawImage(this.nathiya.current,this.nosex,this.nosey,35,50)
 		this.n=window.requestAnimationFrame(this.drawNathiya)
 	}
 	clearFrames(){
@@ -160,7 +160,7 @@ export default class MediaComponent extends React.Component{
 				<div className="selector">
 					<div className="selector-line">
 					{!this.state.showSelecter ? 
-					<div className=" m-auto" onClick={this.toggleSection}>
+					<div className="m-auto" onClick={this.toggleSection}>
 						<button className=" btn earring-button " >&bull; Ear-rings  </button>
 						<span className="bigdot ml-1 mr-1">&bull;</span>
 						<button className="btn earring-button">Nose Rings &bull;</button>
